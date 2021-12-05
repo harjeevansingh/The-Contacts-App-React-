@@ -1,5 +1,5 @@
 import {FETCH_DATA, FETCH_SUCCESS, FETCH_FAILURE, fetchSuccess, fetchData, fetchFailure} from '../actions'
-import {combineReducer} from 'react-redux';
+import {combineReducers} from 'redux';
 import Axios from 'axios';
 
 const URL = 'http://localhost:3002/clientData';
@@ -10,19 +10,22 @@ const initialState = {
     error: ''
 }
 
-function fetchEmployee(){
+export function fetchEmployee(){
     return (dispatch)=>{
-        dispatch(fetchData);
+        dispatch(fetchData());
         Axios
             .get(URL)
-            .then(emp=>{
-                dispatch(fetchSuccess(emp))
+            .then(response=>{
+                dispatch(fetchSuccess(response.data))
             })
-            .catch(error=>{
+            .catch((error)=>{
                 dispatch(fetchFailure(error))
             })
     }
 }
+
+
+
 
 function reducer(state=initialState, action){
     switch(action.type){
@@ -50,4 +53,4 @@ function reducer(state=initialState, action){
     }
 }
 
-export default combineReducer({reducer});
+export default combineReducers({reducer});
